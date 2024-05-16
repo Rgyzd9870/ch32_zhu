@@ -9,7 +9,7 @@ uint32_t uartReadHeart(char * buffer , uint16_t num);
 FlagStatus uartWriteHeartStr(char * str);
 char uartReadByteHeart();
 uint16_t uartAvailableHeart();
-void Rx8Buffer_Printf(char *buffer);
+uint8_t Rx8Buffer_Printf(char *buffer);
 uint8_t heart_receive_judge(char *str);
 
 

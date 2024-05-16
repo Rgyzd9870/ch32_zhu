@@ -25,6 +25,6 @@ C_DEPS += \
 
 # Each subdirectory must supply rules for building sources it contributes
 Hardware/%.o: ../Hardware/%.c
-	@	@	riscv-none-embed-gcc -march=rv32imacxw -mabi=ilp32 -msmall-data-limit=8 -msave-restore -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -Wunused -Wuninitialized  -g -I"E:\新桌面\临时改动\esp8266\githubCH32文件\ch32_zhu\esp8266\Debug" -I"E:\新桌面\临时改动\esp8266\githubCH32文件\ch32_zhu\esp8266\Core" -I"E:\新桌面\临时改动\esp8266\githubCH32文件\ch32_zhu\esp8266\User" -I"E:\新桌面\临时改动\esp8266\githubCH32文件\ch32_zhu\esp8266\Peripheral\inc" -I"E:\新桌面\临时改动\esp8266\githubCH32文件\ch32_zhu\esp8266\Hardware" -std=gnu99 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
+	@	@	riscv-none-embed-gcc -march=rv32imacxw -mabi=ilp32 -msmall-data-limit=8 -msave-restore -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -Wunused -Wuninitialized  -g -I"E:\新桌面\临时改动\esp8266\ch32_zhu\Debug" -I"E:\新桌面\临时改动\esp8266\ch32_zhu\Core" -I"E:\新桌面\临时改动\esp8266\ch32_zhu\User" -I"E:\新桌面\临时改动\esp8266\ch32_zhu\Peripheral\inc" -I"E:\新桌面\临时改动\esp8266\ch32_zhu\Hardware" -std=gnu99 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
 	@	@
 

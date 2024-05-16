@@ -29,7 +29,7 @@
 /* Global define */
 
 /* Global Variable */
-u8 buff[256] ={0};
+u8 buff[88] ={0};
 
 /*********************************************************************
  * @fn      main
@@ -52,6 +52,7 @@ int main(void)
 	USART8_CFG();
 	DMA8_INIT();
 	USART_DMACmd(UART8,USART_DMAReq_Tx|USART_DMAReq_Rx,ENABLE);
+	USART_SendData(UART8, 0x88);
 	Delay_Ms(100);
 	USART_SendData(UART8, 0x8a);
 
@@ -61,10 +62,8 @@ int main(void)
 
 	while(1)
     {
-//	    Rx8Buffer_Printf(buff);
-//	    Delay_Ms(1280);
-
-
+	    Rx8Buffer_Printf(buff);
+	    Delay_Ms(100);
 	}
 }
 

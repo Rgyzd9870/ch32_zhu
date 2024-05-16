@@ -2,12 +2,10 @@
 #include "string.h"
 #include "my_usart8.h"
 
-#define RXBUF_SIZE8 1024 // DMA buffer size
+#define RXBUF_SIZE8 88 // DMA buffer size
 
 u8 TxBuffer_u8[] = "\0";
 u8 RxBuffer_u8[RXBUF_SIZE8]={0};  //只定义了临时缓存区
-
-void UART8_IRQHandler(void) __attribute__((interrupt("WCH-Interrupt-fast")));
 
 /*******************************************************************************
 * Function Name  : USART8_CFG
@@ -21,7 +19,6 @@ void USART8_CFG(void)
 {
     GPIO_InitTypeDef  GPIO_InitStructure;
     USART_InitTypeDef USART_InitStructure;
-    NVIC_InitTypeDef NVIC_InitStructure;
 
     //开启时钟
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART8, ENABLE);
@@ -49,18 +46,6 @@ void USART8_CFG(void)
     USART_Init(UART8, &USART_InitStructure);
 
     USART_Cmd(UART8, ENABLE);                                        //开启UART
-
-    USART_ITConfig(UART8, USART_IT_IDLE, ENABLE);
-
-    /* 嵌套向量中断控制器组选择 */
-    NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
-    /* 配置USART为中断源 */
-    NVIC_InitStructure.NVIC_IRQChannel = UART8_IRQn;
-    NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-    NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-    NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
-
-    NVIC_Init(&NVIC_InitStructure);
 }
 
 /*******************************************************************************
@@ -216,16 +201,20 @@ uint16_t uartAvailableHeart()
 * Input          :  char* data
 * Return         :  char*  缓冲区中的内容
 *******************************************************************************/
-void Rx8Buffer_Printf(char *buffer)
+uint8_t Rx8Buffer_Printf(char *buffer)
 {
+    uint8_t i;
 
-    memset(buffer,'\0',sizeof(buffer));
-    int num = uartAvailableHeart();  //获取可以读的数据量
-    if(num>=0)
+    if(DMA_GetFlagStatus(DMA2_FLAG_TC11))
     {
-        uartReadHeart(buffer , 88); //读取数据到buffer
-//        printf("%s\r\n",buffer);
+        DMA_ClearFlag(DMA2_FLAG_TC11);
+        for(i=0;i<88;i++)
+        {
+            while(USART_GetFlagStatus(USART2, USART_FLAG_TC)==RESET);
+            USART_SendData(USART2, RxBuffer_u8[i]);
+        }
     }
+    return 0;
 }
 
 /***************************************************************************
