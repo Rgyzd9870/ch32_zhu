@@ -256,29 +256,3 @@ uint8_t heart_receive_judge(char *str)
     return 0;
 }
 
-void UART8_IRQHandler(void)
-{
-    u8 buffer[256];
-    u8 temp;
-    u8 i;
-
-    if(USART_GetFlagStatus(UART8, USART_FLAG_IDLE) != RESET)
-    {
-        Rx8Buffer_Printf(buffer);
-
-        for(i=0;i<88;i++)
-        {
-            while (USART_GetFlagStatus(USART2, USART_FLAG_TC) == RESET);// 等待上次传输完成
-            USART_SendData(USART2, buffer[i]);
-        }
-
-
-        temp = UART8->STATR;
-        temp = UART8->DATAR;//清除IDLE中断
-
-        while( USART_GetFlagStatus(UART8, USART_FLAG_TC) == RESET );//必须等待，否则最后一位数据错误
-        DMA_ClearFlag(DMA1_FLAG_TC3); //清除DMA传输完成标志
-        USART_ClearFlag(UART8,USART_FLAG_IDLE);    //清除传输完成标志
-
-    }
-}
